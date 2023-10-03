@@ -1,1 +1,1 @@
-THis is the project file for this project
+This is the project file for this project.
