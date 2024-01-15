@@ -1,27 +1,14 @@
-const request = require('supertest');
-const expect = require('chai').expect;
-const server = require('./api');
+const request = require('request');
+const { expect } = require('chai');
 
-describe('Index page', function () {
-  it('returns status code 200', function (done) {
-    request(server)
-      .get('/')
-      .expect(200)
-      .end(function (err, res) {
-        if (err) return done(err);
-        done();
-      });
+describe('API integration test', () => {
+  const API_URL = 'http://localhost:7865';
+
+  it('GET / returns correct response', (done) => {
+    request.get(`${API_URL}/`, (_err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
+      expect(body).to.be.equal('Welcome to the payment system');
+      done();
+    });
   });
-
-  it('returns the correct result', function (done) {
-    request(server)
-      .get('/')
-      .expect('Welcome to the payment system')
-      .end(function (err, res) {
-        if (err) return done(err);
-        done();
-      });
-  });
-
-  // Add more test cases as needed
 });
