@@ -1,17 +1,10 @@
-// Define a map to keep track of endpoint call counts
-const endpointCallCounts = new WeakMap();
+const weakMap = new WeakMap();
 
-// Define the maximum allowed endpoint calls
-const MAX_ENDPOINT_CALLS = 5;
+const queryAPI = (endpoint) => {
+  let total = weakMap.get(endpoint) || 0;
+  weakMap.set(endpoint, total -= -1);
+  if (total >= 5) throw new Error('Endpoint load is high');
+  return total;
+};
 
-// Function to query the API
-export function queryAPI(endpoint) {
-    let callCount = endpointCallCounts.get(endpoint) || 0;
-    callCount++;
-
-    if (callCount >= MAX_ENDPOINT_CALLS) {
-        throw new Error('Endpoint load is high');
-    }
-
-    endpointCallCounts.set(endpoint, callCount);
-}
+export { weakMap, queryAPI };
